@@ -1,2 +1,4 @@
 /kanban_robot.egg-info/
 /dist/
+/.venv/
+/.idea/
