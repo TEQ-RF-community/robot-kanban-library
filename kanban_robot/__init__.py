@@ -1,5 +1,5 @@
 """
-Simplified Kanban Robot Framework library.
+Kanban Robot Framework library.
 
 This version assumes standardized usage in .robot files:
 - Always pass board_key using a named argument if needed
