@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kanban-robot"
+version = "0.1.0"
+description = "Kanban board library for Robot Framework with optional PySide6 GUI."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Gibran Khan" }]
+requires-python = ">=3.9"
+
+# Core dependencies (Robot only)
+dependencies = [
+    "robotframework>=6.1",
+]
+
+[project.optional-dependencies]
+gui = [
+    "PySide6>=6.6.0",
+]
+
+[project.scripts]
+kanban-gui = "kanban_robot.gui_app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kanban_robot*"]
