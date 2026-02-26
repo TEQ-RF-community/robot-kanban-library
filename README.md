@@ -3,13 +3,14 @@
 
 A simple, classroom‑friendly **Kanban Board library** for **Robot Framework**, featuring:
 
-- ✔️ SQLite backend (self-contained, no external files)
-- ✔️ CRUD operations for Boards & Cards
+- ✔️ SQLite backend (self-contained, no external files needed)
+- ✔️ Clear & consistent API for Boards and Cards
 - ✔️ Inline documentation suitable for Libdoc
-- ✔️ Custom exceptions for test demonstrations
-- ✔️ Optional PySide6 GUI for card movement
+- ✔️ Custom exceptions for teaching error handling
+- ✔️ Optional PySide6 GUI for visualizing card movement
 - ✔️ Easy installation via `pip install .` or `pip install ".[gui]"`
 
+---
 
 ## 🚀 Features
 
@@ -18,11 +19,13 @@ A simple, classroom‑friendly **Kanban Board library** for **Robot Framework**,
 - Delete Board
 - List Boards
 - Make Board Default
-- Board Should Exist / Should Not Exist
+- Board Should Exist
+- Board Should Not Exist
 
 ### 📝 Card Management
 - Create Card
-- Update Title / Description
+- Update Card Title
+- Update Card Description
 - Update Card Status To
 - Delete Card
 - List Cards In Status
@@ -30,7 +33,8 @@ A simple, classroom‑friendly **Kanban Board library** for **Robot Framework**,
 ### 🔍 Queries & Assertions
 - Get Card Details
 - Get Board Summary
-- Card Should Have Title / Description
+- Card Should Have Title
+- Card Should Have Description
 - Card Should Exist In Column
 - Number Of Cards In Column Should Be
 
@@ -43,7 +47,7 @@ A simple, classroom‑friendly **Kanban Board library** for **Robot Framework**,
 
 ## 📦 Building the Library
 
-### Build the pip-installable library
+### Build a pip-installable wheel / sdist
 ```bash
 python -m build
 ```
@@ -52,17 +56,17 @@ python -m build
 
 ## 📦 Installation
 
-### Install library only
+### Install the library only
 ```bash
 pip install .
 ```
 
-### Install with GUI support
+### Install with optional GUI support
 ```bash
 pip install ".[gui]"
 ```
 
-### Run GUI
+### Run the GUI
 ```bash
 kanban-gui
 ```
@@ -70,10 +74,11 @@ kanban-gui
 ---
 
 ## 🧪 Example Robot Framework Test
+*(Updated for the simplified API)*
 
 ```robot
 *** Settings ***
-Library    kanban_robot
+Library    kanban_robot.KanbanLibrary
 
 Suite Setup     Clear Kanban Database
 Suite Teardown  Close Kanban Database Connection
@@ -83,25 +88,40 @@ Board And Card Flow
     ${board}=    Create Board    My First Board    default=${True}
     Board Should Exist    ${board}
 
-    ${c1}=    Create Card    title=Auth     status=To Do         boardkey=${board}
-    ${c2}=    Create Card    title=Docs     status=In Progress   boardkey=${board}
-    ${c3}=    Create Card    title=Release  status=Done          boardkey=${board}
+    ${c1}=    Create Card    title=Auth     status=To Do         board_key=${board}
+    ${c2}=    Create Card    title=Docs     status=In Progress   board_key=${board}
+    ${c3}=    Create Card    title=Release  status=Done          board_key=${board}
 
-    Update Card Status To   ${c1}    In Progress
-    Card Should Exist In Column    ${c1}    In Progress
+    Update Card Status To    ${c1}    In Progress
+    Card Should Exist In Column    ${c1}    In Progress    board_key=${board}
 
-    Update Card Description        ${c1}    Must support JWT
-    Card Should Have Description   ${c1}    Must support JWT
+    Update Card Description    ${c1}    Must support JWT
+    Card Should Have Description    ${c1}    Must support JWT
 
-    ${summary}=    Get Board Summary    ${board}
+    ${summary}=    Get Board Summary    board_key=${board}
     Log    ${summary}
 ```
+
+### 🔑 API Notes
+- Always pass board id using:
+  ```robot
+  board_key=${board}
+  ```
+- Use consistent status update signature:
+  ```robot
+  Update Card Status To    ${card_id}    ${status}
+  ```
+- Use consistent count assertion signature:
+  ```robot
+  Number Of Cards In Column Should Be    ${expected}    ${status}    board_key=${board}
+  ```
 
 ---
 
 ## 📚 Documentation Generation
 
-### Robot Framework Libdoc
+Generate keyword documentation using Robot Libdoc:
+
 ```bash
 python -m robot.libdoc kanban_robot KanbanLibrary.html
 ```
@@ -109,5 +129,4 @@ python -m robot.libdoc kanban_robot KanbanLibrary.html
 ---
 
 ## 📝 License
-MIT License — feel free to use this library for teaching, demos, or internal training.
-
+MIT License — free to use for teaching, demos, internal training, and academic purposes.
